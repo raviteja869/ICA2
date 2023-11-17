@@ -1,0 +1,13 @@
+name: 'Deploy Action'
+description: 'Custom action to deploy the application'
+inputs:
+  environment:
+    description: 'Deployment environment'
+    required: true
+    default: 'production'
+runs:
+  using: 'composite'
+  steps:
+    - name: Deploy to environment
+      run: sh ${{ github.action_path }}/deploy.sh ${{ inputs.environment }}
+      shell: bash

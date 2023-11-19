@@ -44,16 +44,16 @@ jobs:
 
     - name: Build and push Docker image
       run: |
-        docker build -t username/appname:latest .  # Replace with your DockerHub username and app name
+        docker build -t ghcr.io/ravitejadocker8698/my-python-app:latest .  # Replace with your DockerHub username and app name
         echo ${{ secrets.DOCKER_HUB_ACCESS_TOKEN }} | docker login -u ${{ secrets.DOCKER_HUB_USERNAME }} --password-stdin
-        docker push username/appname:latest
+        docker push ghcr.io/ravitejadocker8698/my-python-app:latest
 
   integration-test:
     needs: dockerize-application
     runs-on: self-hosted
     services:
       app:
-        image: username/appname:latest  # Use the same image name
+        image: ghcr.io/ravitejadocker8698/my-python-app:latest  # Use the same image name
         ports:
           - 5000:5000
     steps:

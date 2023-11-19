@@ -2,9 +2,9 @@ name: ICA2 Group 3 Github Actions CI/CD Pipeline
 
 on:
   push:
-    branches: [ main ]
+    branches: [main]
   pull_request:
-    branches: [ main ]
+    branches: [main]
 
 jobs:
   Build-and-Test:
@@ -23,29 +23,33 @@ jobs:
 
       - name: Installing all our dependencies
         run: pip install -r requirements.txt
-	  - run: python test_app.py
-      # Ensure this command runs your tests. Update if tests are in a different directory
 
-    # Temporarily commenting out until test report generation is set up
-      - name: Upload test report as an artifact
-        uses: actions/upload-artifact@v2
-        if: always() # Ensures this step runs even if tests fail
-        with:
-          name: test-reports
-          path: test-reports/ # Update with actual path where test reports are stored
+      - name: Run unit tests
+        run: python test_app.py
+        # Ensure this command runs your tests. Update if tests are in a different directory
 
-  dockerize-application:
-    needs: build-and-test
+      # Temporarily commenting out until test report generation is set up
+      # - name: Upload test report as an artifact
+      #   uses: actions/upload-artifact@v2
+      #   if: always() # Ensures this step runs even if tests fail
+      #   with:
+      #     name: test-reports
+      #     path: test-reports/ # Update with actual path where test reports are stored
+
+  Dockerize-Application:
+    needs: Build-and-Test
     runs-on: self-hosted
     steps:
-    - uses: actions/checkout@v2
-    - run: |
-        docker build -t ghcr.io/ravitejadocker8698/my-python-app:latest .
-        echo ${{ secrets.DOCKER_HUB_ACCESS_TOKEN }} | docker login ghcr.io -u ${{ secrets.DOCKER_HUB_USERNAME }} --password-stdin
-        docker push ghcr.io/ravitejadocker8698/my-python-app:latest
+      - uses: actions/checkout@v2
 
-  integration-test:
-    needs: dockerize-application
+      - name: Build and push Docker image
+        run: |
+          docker build -t ghcr.io/ravitejadocker8698/my-python-app:latest .
+          echo ${{ secrets.DOCKER_HUB_ACCESS_TOKEN }} | docker login ghcr.io -u ${{ secrets.DOCKER_HUB_USERNAME }} --password-stdin
+          docker push ghcr.io/ravitejadocker8698/my-python-app:latest
+
+  Integration-Test:
+    needs: Dockerize-Application
     runs-on: self-hosted
     services:
       app:
@@ -53,18 +57,21 @@ jobs:
         ports:
           - 5001:5000
     steps:
-    - uses: actions/checkout@v2
-    - run: |
-        # Replace this with actual commands to run integration tests
-        # Example placeholder for testing purpose
-        curl http://localhost:5001/
+      - uses: actions/checkout@v2
 
-  deploy:
-    needs: integration-test
+      - name: Run integration tests
+        run: |
+          # Replace this with actual commands to run integration tests
+          curl http://localhost:5001/
+          # Example placeholder for testing purpose
+
+  Deploy:
+    needs: Integration-Test
     runs-on: self-hosted
     steps:
-    - uses: actions/checkout@v2
-    - name: Custom Deployment Action
-      uses: ./.github/actions/deploy-action
-      with:
-        environment: 'production'
+      - uses: actions/checkout@v2
+
+      - name: Custom Deployment Action
+        uses: ./.github/actions/deploy-action
+        with:
+          environment: 'production'

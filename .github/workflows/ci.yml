@@ -17,14 +17,16 @@ jobs:
     - run: |
         pip install --upgrade pip
         pip install -r requirements.txt
-    - run: python -m unittest discover -s tests  # Assuming tests are in the 'tests' directory
-      # Update the above command to run your tests and generate a report in 'test-reports' directory
-    - name: Upload test report as an artifact
-      uses: actions/upload-artifact@v2
-      if: always()  # Ensures this step runs even if tests fail
-      with:
-        name: test-reports
-        path: test-reports/  # Update with actual path where test reports are stored
+    - run: python test_app.py
+      # Ensure this command runs your tests. Update if tests are in a different directory
+
+    # Temporarily commenting out until test report generation is set up
+    # - name: Upload test report as an artifact
+    #   uses: actions/upload-artifact@v2
+    #   if: always() # Ensures this step runs even if tests fail
+    #   with:
+    #     name: test-reports
+    #     path: test-reports/ # Update with actual path where test reports are stored
 
   dockerize-application:
     needs: build-and-test
@@ -47,8 +49,9 @@ jobs:
     steps:
     - uses: actions/checkout@v2
     - run: |
-        # Replace this with the actual command/script to run integration tests
-        curl http://localhost:5001/  # Example placeholder
+        # Replace this with actual commands to run integration tests
+        # Example placeholder for testing purpose
+        curl http://localhost:5001/
 
   deploy:
     needs: integration-test

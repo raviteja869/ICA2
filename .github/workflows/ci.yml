@@ -32,12 +32,12 @@ jobs:
     steps:
     - uses: actions/checkout@v2
     - name: Login to GitHub Container Registry
-      run: echo ${{ secrets.DOCKER_HUB_ACCESS_TOKEN }} | docker login ghcr.io -u ${{ github.actor }} --password-stdin
+      run: echo ${{ secrets.GHCR_TOKEN }} | docker login ghcr.io -u ${{ github.actor }} --password-stdin
       shell: cmd
     - name: Build and push Docker image
       run: |
-        docker build -t ghcr.io/your-username/your-app-name:latest .
-        docker push ghcr.io/your-username/your-app-name:latest
+        docker build -t ghcr.io/raviteja869/Mandelbrot-Set-Visualizer:latest .
+        docker push ghcr.io/raviteja869/Mandelbrot-Set-Visualizer:latest
       shell: cmd
         
        

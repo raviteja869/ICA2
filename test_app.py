@@ -1,6 +1,7 @@
 import unittest
 from app import app, compute_mandelbrot, plot_mandelbrot
 import numpy as np
+import xmlrunner
 
 class TestMandelbrotApp(unittest.TestCase):
     def setUp(self):
@@ -39,4 +40,7 @@ class TestMandelbrotApp(unittest.TestCase):
         self.assertIn('image_data', data)
 
 if __name__ == '__main__':
-    unittest.main()
+    with open('test-reports/output.xml', 'wb') as output:
+        unittest.main(
+            testRunner=xmlrunner.XMLTestRunner(output=output),
+            failfast=False, buffer=False, catchbreak=False)

@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuites>
+	<testsuite name="TestMandelbrotApp-20231119021512" tests="4" file=".py" time="8.602" timestamp="2023-11-19T02:15:20" failures="0" errors="0" skipped="0">
+		<testcase classname="TestMandelbrotApp" name="test_compute_mandelbrot" time="0.426" timestamp="2023-11-19T02:15:12" file="test_app.py" line="11"/>
+		<testcase classname="TestMandelbrotApp" name="test_home_route" time="0.016" timestamp="2023-11-19T02:15:12" file="test_app.py" line="26"/>
+		<testcase classname="TestMandelbrotApp" name="test_plot_mandelbrot" time="4.136" timestamp="2023-11-19T02:15:16" file="test_app.py" line="20"/>
+		<testcase classname="TestMandelbrotApp" name="test_plot_route" time="4.024" timestamp="2023-11-19T02:15:20" file="test_app.py" line="32"/>
+	</testsuite>
+</testsuites>

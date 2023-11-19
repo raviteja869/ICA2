@@ -1,0 +1,12 @@
+﻿{
+  "repositoryName": "raviteja869/ICA2",
+  "pipelineDirectory": "ICA2",
+  "workspaceDirectory": "ICA2\\ICA2",
+  "repositories": {
+    "raviteja869/ICA2": {
+      "repositoryPath": "ICA2\\ICA2",
+      "lastRunOn": "11/18/2023 23:40:37 -05:00"
+    }
+  },
+  "lastRunOn": "11/19/2023 01:07:26 -05:00"
+}

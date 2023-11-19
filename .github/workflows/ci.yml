@@ -1,4 +1,4 @@
-name: ICA2 Group 3 Github Actions CI/CD Pipeline
+name: ICA2 Group 3 Github Action CI/CD Pipeline
 
 on:
   push:

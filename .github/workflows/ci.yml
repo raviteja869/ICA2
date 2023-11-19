@@ -17,27 +17,23 @@ jobs:
     - run: |
         pip install --upgrade pip
         pip install -r requirements.txt
-    - run: python -m unittest discover -s tests
-      # Ensure the above line is correct
-
-
+    - run: python -m unittest discover -s tests  # Assuming tests are in the 'tests' directory
+      # Update the above command to run your tests and generate a report in 'test-reports' directory
     - name: Upload test report as an artifact
       uses: actions/upload-artifact@v2
+      if: always()  # Ensures this step runs even if tests fail
       with:
         name: test-reports
-        path: path/to/test-reports  # Replace with your test report path
+        path: test-reports/  # Update with actual path where test reports are stored
 
   dockerize-application:
     needs: build-and-test
     runs-on: self-hosted
     steps:
-    - name: Checkout repository
-      uses: actions/checkout@v2
-
-    - name: Build and push Docker image
-      run: |
-        docker build -t ghcr.io/ravitejadocker8698/my-python-app:latest .  # Replace with your DockerHub username and app name
-        echo ${{ secrets.DOCKER_HUB_ACCESS_TOKEN }} | docker login -u ${{ secrets.DOCKER_HUB_USERNAME }} --password-stdin
+    - uses: actions/checkout@v2
+    - run: |
+        docker build -t ghcr.io/ravitejadocker8698/my-python-app:latest .
+        echo ${{ secrets.DOCKER_HUB_ACCESS_TOKEN }} | docker login ghcr.io -u ${{ secrets.DOCKER_HUB_USERNAME }} --password-stdin
         docker push ghcr.io/ravitejadocker8698/my-python-app:latest
 
   integration-test:
@@ -45,28 +41,21 @@ jobs:
     runs-on: self-hosted
     services:
       app:
-        image: ghcr.io/ravitejadocker8698/my-python-app:latest  # Use the same image name
+        image: ghcr.io/ravitejadocker8698/my-python-app:latest
         ports:
           - 5001:5000
     steps:
-    - name: Checkout repository
-      uses: actions/checkout@v2
-
-    - name: Run integration tests (example)
-      run: |
-        # Assuming you have a script to run integration tests against the service
-        ./run_integration_tests.sh
+    - uses: actions/checkout@v2
+    - run: |
+        # Replace this with the actual command/script to run integration tests
+        curl http://localhost:5001/  # Example placeholder
 
   deploy:
     needs: integration-test
     runs-on: self-hosted
     steps:
-    - name: Checkout repository
-      uses: actions/checkout@v2
-
+    - uses: actions/checkout@v2
     - name: Custom Deployment Action
       uses: ./.github/actions/deploy-action
       with:
-        environment: 'production' # Or other environments like 'staging'
-
-  
+        environment: 'production'

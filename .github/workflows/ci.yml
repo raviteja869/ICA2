@@ -1,4 +1,4 @@
-name: Comprehensive CI/CD Pipeline
+name: ICA2 Group 3 CI/CD Pipeline
 
 on:
   push:
@@ -8,8 +8,9 @@ on:
 
 jobs:
   build-and-test:
-    runs-on: self-hosted  # Assuming you have labeled your self-hosted runners
-
+    # Assuming you have labeled your self-hosted runners
+    runs-on: [self-hosted, Windows, X64]
+    
     steps:
     - name: Checkout repository
       uses: actions/checkout@v2

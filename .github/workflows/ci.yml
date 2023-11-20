@@ -9,55 +9,47 @@ jobs:
   Build-and-Test:
     runs-on: self-hosted
     steps:
-        - name: Checkout
-          uses: actions/checkout@v4.1.1
-        - name: Setup Python
-          uses: actions/setup-python@v4.7.1
-          
-        - name: Python Dependency Installation
-          run: pip install -r requirements.txt
-          shell: cmd
-        - name: Run Unit Tests
-          run: python test_app.py
-          shell: cmd
-        - name: Upload a Build Artifact
-          uses: actions/upload-artifact@v3.1.3
-          with:
-             name: test-reports
-             path: test-reports/
-          
+      - name: Checkout
+        uses: actions/checkout@v4.1.1
+      - name: Setup Python
+        uses: actions/setup-python@v4.7.1
+      - name: Python Dependency Installation
+        run: pip install -r requirements.txt
+        shell: cmd
+      - name: Run Unit Tests
+        run: python test_app.py
+        shell: cmd
+      - name: Upload a Build Artifact
+        uses: actions/upload-artifact@v3.1.3
+        with:
+          name: test-reports
+          path: test-reports/
+
   Dockerize-application:
-  
     needs: Build-and-Test
     runs-on: self-hosted
     steps:
-    - uses: actions/checkout@v2
-    - name: Login to GitHub Container Registry
-      run: echo ${{ secrets.GHCR_TOKEN }} | docker login ghcr.io -u ${{ github.actor }} --password-stdin
-      shell: cmd
-    - name: Build and push Docker image
-      run: |
-        docker build -t ghcr.io/raviteja869/mandelbrot-set-visualizer:latest .
-        docker push ghcr.io/raviteja869/mandelbrot-set-visualizer:latest
-      shell: cmd
-        
+      - uses: actions/checkout@v2
+      - name: Login to GitHub Container Registry
+        run: echo ${{ secrets.GHCR_TOKEN }} | docker login ghcr.io -u ${{ github.actor }} --password-stdin
+        shell: cmd
+      - name: Build and push Docker image
+        run: |
+          docker build -t ghcr.io/raviteja869/mandelbrot-set-visualizer:latest .
+          docker push ghcr.io/raviteja869/mandelbrot-set-visualizer:latest
+        shell: cmd
+
   Integration-Test:
-	
-	needs: Dockerize-application
-	runs-on: self-hosted
-	services:
+    needs: Dockerize-application
+    runs-on: self-hosted
+    services:
       app:
         image: ghcr.io/raviteja869/mandelbrot-set-visualizer:latest
         ports:
           - 5000:5000
-	steps:
-	- uses: actions/checkout@v2
-	- name: Start Application
-		run: |
-		docker run -d -p 5000:5000 ghcr.io/raviteja869/mandelbrot-set-visualizer:latest
-		shell: cmd
-	- name: Run Integration Tests
-		run: |
-		# Replace with actual integration test commands
-		./run_integration_tests.sh
-		shell: cmd
+    steps:
+      - uses: actions/checkout@v2
+      - name: Run Integration Tests
+        run: |
+          ./run_integration_tests.sh
+        shell: cmd

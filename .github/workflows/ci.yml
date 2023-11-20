@@ -60,8 +60,8 @@ jobs:
       - name: Run Integration Tests
         run: |
           if [ "${{ runner.os }}" == "Windows" ]; then
-            run_integration_tests.bat
+            cmd /c run_integration_tests.bat
           else
-            ./run_integration_tests.sh
+            bash ./run_integration_tests.sh
           fi
         shell: bash

@@ -58,10 +58,5 @@ jobs:
         run: docker run -d -p 5000:5000 ghcr.io/raviteja869/mandelbrot-set-visualizer:latest
         shell: cmd
       - name: Run Integration Tests
-        run: |
-          if [ "${{ runner.os }}" == "Windows" ]; then
-            cmd /c run_integration_tests.bat
-          else
-            bash ./run_integration_tests.sh
-          fi
-        shell: bash
+        run: cmd /c run_integration_tests.bat
+        shell: cmd

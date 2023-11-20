@@ -6,8 +6,5 @@ inputs:
     required: true
     default: 'production'
 runs:
-  using: 'composite'
-  steps:
-    - name: Deploy to environment
-      run: bash ${{ github.action_path }}/deploy.sh ${{ inputs.environment }}
-      shell: bash
+  using: 'node12'
+  main: 'deploy.js'

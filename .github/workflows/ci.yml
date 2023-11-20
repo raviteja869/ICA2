@@ -48,5 +48,10 @@ jobs:
         run: docker run -d -p 5000:5000 ghcr.io/raviteja869/mandelbrot-set-visualizer:latest
         shell: cmd
       - name: Run Integration Tests
-        run: ./run_integration_tests.sh
-        shell: cmd
+        run: |
+          if [ "${{ runner.os }}" == "Windows" ]; then
+            run_integration_tests.bat
+          else
+            ./run_integration_tests.sh
+          fi
+        shell: bash  # Use bash to evaluate conditional statement

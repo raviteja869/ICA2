@@ -1,5 +1,5 @@
-name: 'Deploy Action'
-description: 'Custom action to deploy the application'
+name: 'Deploy Application'
+description: 'Deploy the Mandelbrot Set Visualizer application'
 inputs:
   environment:
     description: 'Deployment environment'
@@ -9,5 +9,5 @@ runs:
   using: 'composite'
   steps:
     - name: Deploy to environment
-      run: sh ${{ github.action_path }}/deploy.sh ${{ inputs.environment }}
+      run: bash ${{ github.action_path }}/deploy.sh ${{ inputs.environment }}
       shell: bash

@@ -27,6 +27,7 @@ jobs:
              path: test-reports/
           
   Dockerize-application:
+  
     needs: Build-and-Test
     runs-on: self-hosted
     steps:
@@ -40,4 +41,23 @@ jobs:
         docker push ghcr.io/raviteja869/mandelbrot-set-visualizer:latest
       shell: cmd
         
-       
+  Integration-Test:
+	
+	needs: Dockerize-application
+	runs-on: self-hosted
+	services:
+      app:
+        image: ghcr.io/raviteja869/mandelbrot-set-visualizer:latest
+        ports:
+          - 5000:5000
+	steps:
+	- uses: actions/checkout@v2
+	- name: Start Application
+		run: |
+		docker run -d -p 5000:5000 ghcr.io/raviteja869/mandelbrot-set-visualizer:latest
+		shell: cmd
+	- name: Run Integration Tests
+		run: |
+		# Replace with actual integration test commands
+		./run_integration_tests.sh
+		shell: cmd

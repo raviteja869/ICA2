@@ -44,6 +44,16 @@ jobs:
     runs-on: self-hosted
     steps:
       - uses: actions/checkout@v2
+      - name: Check Port Availability
+        run: |
+          netstat -ano | findstr :5000
+          if errorlevel 1 (
+            echo "Port 5000 is available"
+          ) else (
+            echo "Port 5000 is in use. Stopping the running container."
+            docker stop $(docker ps -q --filter "ancestor=ghcr.io/raviteja869/mandelbrot-set-visualizer:latest")
+          )
+        shell: cmd
       - name: Start Dockerized Application
         run: docker run -d -p 5000:5000 ghcr.io/raviteja869/mandelbrot-set-visualizer:latest
         shell: cmd
@@ -54,4 +64,4 @@ jobs:
           else
             ./run_integration_tests.sh
           fi
-        shell: bash  # Use bash to evaluate conditional statement
+        shell: bash

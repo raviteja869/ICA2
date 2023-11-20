@@ -15,8 +15,8 @@ echo Integration test passed successfully
 exit /b 0
 
 :RetryTest
-REM Wait for 5 seconds before retrying
-ping localhost -n 6 >nul
+REM Wait for 10 seconds before retrying
+ping localhost -n 11 >nul
 
 REM Retry the home route test
 curl -f http://localhost:5000/

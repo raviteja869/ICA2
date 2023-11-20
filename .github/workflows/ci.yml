@@ -42,14 +42,11 @@ jobs:
   Integration-Test:
     needs: Dockerize-application
     runs-on: self-hosted
-    services:
-      app:
-        image: ghcr.io/raviteja869/mandelbrot-set-visualizer:latest
-        ports:
-          - 5000:5000
     steps:
       - uses: actions/checkout@v2
+      - name: Start Dockerized Application
+        run: docker run -d -p 5000:5000 ghcr.io/raviteja869/mandelbrot-set-visualizer:latest
+        shell: cmd
       - name: Run Integration Tests
-        run: |
-          ./run_integration_tests.sh
+        run: ./run_integration_tests.sh
         shell: cmd

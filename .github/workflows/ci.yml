@@ -60,3 +60,13 @@ jobs:
       - name: Run Integration Tests
         run: cmd /c run_integration_tests.bat
         shell: cmd
+  Deploy:
+    needs: Integration-Test
+    runs-on: self-hosted
+    steps:
+      - uses: actions/checkout@v2
+      - name: Custom Deployment Action
+        uses: ./.github/actions/deploy-action
+        with:
+          environment: 'production'
+

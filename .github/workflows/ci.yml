@@ -51,7 +51,7 @@ jobs:
             echo "Port 5000 is available"
           ) else (
             echo "Port 5000 is in use. Stopping the running container."
-            FOR /F "tokens=*" %%i IN ('docker ps -q --filter "ancestor=ghcr.io/raviteja869/mandelbrot-set-visualizer:latest"') DO docker stop %%i
+            FOR /F "tokens=*" %%i IN ('docker ps -q -f "publish=5000"') DO docker stop %%i
           )
         shell: cmd
       - name: Start Dockerized Application

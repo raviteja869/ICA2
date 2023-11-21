@@ -11,14 +11,35 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4.1.1
-      - name: Setup Python
+
+      # Setup Python
+      - name: Setup Python (Windows)
+        if: runner.os == 'Windows'
         uses: actions/setup-python@v4.7.1
-      - name: Python Dependency Installation
+        with:
+          python-version: '3.9'
+
+      - name: Setup Python (Linux)
+        if: runner.os == 'Linux'
+        uses: actions/setup-python@v4.7.1
+        with:
+          python-version: '3.9'
+
+      # Install Dependencies
+      - name: Install Dependencies (Windows)
+        if: runner.os == 'Windows'
         run: pip install -r requirements.txt
         shell: cmd
+
+      - name: Install Dependencies (Linux)
+        if: runner.os == 'Linux'
+        run: pip install -r requirements.txt
+
+      # Run Tests
       - name: Run Unit Tests
         run: python test_app.py
-        shell: cmd
+
+      # Upload Test Reports
       - name: Upload a Build Artifact
         uses: actions/upload-artifact@v3.1.3
         with:
@@ -30,21 +51,32 @@ jobs:
     runs-on: self-hosted
     steps:
       - uses: actions/checkout@v2
-      - name: Login to GitHub Container Registry
+
+      # Login to GHCR
+      - name: Login to GitHub Container Registry (Windows)
+        if: runner.os == 'Windows'
         run: echo ${{ secrets.GHCR_TOKEN }} | docker login ghcr.io -u ${{ github.actor }} --password-stdin
         shell: cmd
+
+      - name: Login to GitHub Container Registry (Linux)
+        if: runner.os == 'Linux'
+        run: echo ${{ secrets.GHCR_TOKEN }} | docker login ghcr.io -u ${{ github.actor }} --password-stdin
+
+      # Build and Push Docker Image
       - name: Build and push Docker image
         run: |
           docker build -t ghcr.io/raviteja869/mandelbrot-set-visualizer:latest .
           docker push ghcr.io/raviteja869/mandelbrot-set-visualizer:latest
-        shell: cmd
 
   Integration-Test:
     needs: Dockerize-application
     runs-on: self-hosted
     steps:
       - uses: actions/checkout@v2
-      - name: Check Port Availability
+
+      # Check Port Availability
+      - name: Check Port Availability (Windows)
+        if: runner.os == 'Windows'
         run: |
           netstat -ano | findstr :5000
           if errorlevel 1 (
@@ -54,19 +86,29 @@ jobs:
             FOR /F "tokens=*" %%i IN ('docker ps -q -f "publish=5000"') DO docker stop %%i
           )
         shell: cmd
+
+      # Start Dockerized Application
       - name: Start Dockerized Application
         run: docker run -d -p 5000:5000 ghcr.io/raviteja869/mandelbrot-set-visualizer:latest
-        shell: cmd
-      - name: Run Integration Tests
+
+      # Run Integration Tests
+      - name: Run Integration Tests (Windows)
+        if: runner.os == 'Windows'
         run: cmd /c run_integration_tests.bat
         shell: cmd
+
+      - name: Run Integration Tests (Linux)
+        if: runner.os == 'Linux'
+        run: bash ./run_integration_tests.sh
+
   Deploy:
     needs: Integration-Test
     runs-on: self-hosted
     steps:
       - uses: actions/checkout@v2
+
+      # Custom Deployment Action
       - name: Custom Deployment Action
         uses: ./.github/actions/deploy-action
         with:
           environment: 'production'
-

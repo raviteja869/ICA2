@@ -12,23 +12,19 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4.1.1
 
-      # Setup Python
       - name: Setup Python
         uses: actions/setup-python@v4.7.1
         with:
           python-version: '3.9'
 
-      # Install Dependencies
       - name: Install Dependencies
         run: pip install -r requirements.txt
-        shell: ${{ runner.os == 'Windows' && 'cmd' || 'bash' }}
+        shell: bash
 
-      # Run Tests
       - name: Run Unit Tests
         run: python test_app.py
-        shell: ${{ runner.os == 'Windows' && 'cmd' || 'bash' }}
+        shell: bash
 
-      # Upload Test Reports
       - name: Upload a Build Artifact
         uses: actions/upload-artifact@v3.1.3
         with:
@@ -41,17 +37,13 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
-      # Login to GHCR
       - name: Login to GitHub Container Registry
         run: echo ${{ secrets.GHCR_TOKEN }} | docker login ghcr.io -u ${{ github.actor }} --password-stdin
-        shell: ${{ runner.os == 'Windows' && 'cmd' || 'bash' }}
+        shell: bash
 
-      # Build and Push Docker Image
       - name: Build and push Docker image
-        run: |
-          docker build -t ghcr.io/raviteja869/mandelbrot-set-visualizer:latest .
-          docker push ghcr.io/raviteja869/mandelbrot-set-visualizer:latest
-        shell: ${{ runner.os == 'Windows' && 'cmd' || 'bash' }}
+        run: docker build -t ghcr.io/raviteja869/mandelbrot-set-visualizer:latest . && docker push ghcr.io/raviteja869/mandelbrot-set-visualizer:latest
+        shell: bash
 
   Integration-Test:
     needs: Dockerize-application
@@ -59,25 +51,17 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
-      # Check Port Availability
       - name: Check Port Availability
-        run: |
-          if [ "${{ runner.os }}" == "Windows" ]; then
-            netstat -ano | findstr :5000
-            if errorlevel 1 echo "Port 5000 is available"
-            FOR /F "tokens=*" %%i IN ('docker ps -q -f "publish=5000"') DO docker stop %%i
-          fi
-        shell: ${{ runner.os == 'Windows' && 'cmd' || 'bash' }}
+        run: netstat -tuln | grep :5000 || echo "Port 5000 is available"
+        shell: bash
 
-      # Start Dockerized Application
       - name: Start Dockerized Application
         run: docker run -d -p 5000:5000 ghcr.io/raviteja869/mandelbrot-set-visualizer:latest
-        shell: ${{ runner.os == 'Windows' && 'cmd' || 'bash' }}
+        shell: bash
 
-      # Run Integration Tests
       - name: Run Integration Tests
-        run: ${{ runner.os == 'Windows' && 'cmd /c run_integration_tests.bat' || 'bash ./run_integration_tests.sh' }}
-        shell: ${{ runner.os == 'Windows' && 'cmd' || 'bash' }}
+        run: bash ./run_integration_tests.sh
+        shell: bash
 
   Deploy:
     needs: Integration-Test
@@ -85,7 +69,6 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
-      # Custom Deployment Action
       - name: Custom Deployment Action
         uses: ./.github/actions/deploy-action
         with:

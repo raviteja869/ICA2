@@ -13,6 +13,8 @@ jobs:
         uses: actions/checkout@v4.1.1
       - name: Setup Python
         uses: actions/setup-python@v4.7.1
+        with:
+          python-version: '3.9'
       - name: Python Dependency Installation
         run: pip install -r requirements.txt
         shell: cmd
@@ -32,11 +34,13 @@ jobs:
         uses: actions/checkout@v4.1.1
       - name: Setup Python
         uses: actions/setup-python@v4.7.1
-      - name: Pip Installation
-        run: python -m pip install
+        with:
+          python-version: '3.9'
       - name: Python Dependency Installation
-        run: pip install -r requirements.txt
-        
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
       - name: Run Unit Tests
         run: python test_app.py
       - name: Upload a Build Artifact
@@ -64,7 +68,7 @@ jobs:
       - uses: actions/checkout@v2
       - name: Check Port Availability
         run: |
-          netstat -ano | findstr :5000
+          netstat -ano | grep :5000
           if [ $? -eq 0 ]; then
             echo "Port 5000 is in use. Stopping the running container."
             docker stop $(docker ps -q --filter "publish=5000")

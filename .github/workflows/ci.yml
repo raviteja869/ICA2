@@ -13,8 +13,6 @@ jobs:
         uses: actions/checkout@v4.1.1
       - name: Setup Python
         uses: actions/setup-python@v4.7.1
-        with:
-          python-version: '3.9'
       - name: Python Dependency Installation
         run: pip install -r requirements.txt
         shell: cmd

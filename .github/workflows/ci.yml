@@ -1,10 +1,8 @@
 name: "ICA2 CI/CD pipeline"
-
 on:
   push:
     branches:
       - main
-
 jobs:
   Build-and-Test:
     runs-on: self-hosted
@@ -24,7 +22,6 @@ jobs:
         with:
           name: test-reports
           path: test-reports/
-
   Dockerize-application:
     needs: Build-and-Test
     runs-on: self-hosted
@@ -38,7 +35,6 @@ jobs:
           docker build -t ghcr.io/raviteja869/mandelbrot-set-visualizer:latest .
           docker push ghcr.io/raviteja869/mandelbrot-set-visualizer:latest
         shell: cmd
-
   Integration-Test:
     needs: Dockerize-application
     runs-on: self-hosted

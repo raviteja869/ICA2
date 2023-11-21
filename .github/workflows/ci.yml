@@ -1,4 +1,4 @@
-name: "ICA2 Group 3 CI/CD pipeline"
+name: "ICA2 Group3 CI/CD pipeline"
 
 on:
   push:

@@ -6,5 +6,14 @@ inputs:
     required: true
     default: 'production'
 runs:
-  using: 'node12'
-  main: 'deploy.js'
+  using: 'composite'
+  steps:
+    - name: Deploy to environment
+      run: bash ${{ github.action_path }}/deploy.sh ${{ inputs.environment }}
+      shell: bash    
+
+
+#for windows runner environment deployment include the below run commands in Action.yml
+#runs:
+#  using: 'node12'
+#  main: 'deploy.js'

@@ -48,12 +48,17 @@ jobs:
           path: test-reports/
 
   Dockerize-application:
-    needs: [Build-and-Test-Windows, Build-and-Test-Linux]
-    runs-on: [self-hosted, Linux, X64]
+    needs: Build-and-Test-Linux
+    runs-on: self-hosted
     steps:
       - uses: actions/checkout@v2
+
+      - name: Test Docker Permissions
+        run: docker info
+
       - name: Login to GitHub Container Registry
         run: echo ${{ secrets.GHCR_TOKEN }} | docker login ghcr.io -u ${{ github.actor }} --password-stdin
+
       - name: Build and push Docker image
         run: |
           docker build -t ghcr.io/raviteja869/mandelbrot-set-visualizer:latest .

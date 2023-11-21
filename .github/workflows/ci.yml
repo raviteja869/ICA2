@@ -32,8 +32,11 @@ jobs:
         uses: actions/checkout@v4.1.1
       - name: Setup Python
         uses: actions/setup-python@v4.7.1
+      - name: Pip Installation
+        run: python -m pip install
       - name: Python Dependency Installation
         run: pip install -r requirements.txt
+        
       - name: Run Unit Tests
         run: python test_app.py
       - name: Upload a Build Artifact

@@ -82,7 +82,7 @@ jobs:
       - name: Start Dockerized Application
         run: docker run -d -p 5000:5000 ghcr.io/raviteja869/mandelbrot-set-visualizer:latest
       - name: Run Integration Tests
-        run: bash ./run_integration_tests.sh
+        run: ./run_integration_tests.sh
 
   Deploy:
     needs: Integration-Test

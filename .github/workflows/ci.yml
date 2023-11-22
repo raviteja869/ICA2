@@ -71,8 +71,8 @@ jobs:
       - uses: actions/checkout@v2
       - name: Check Port Availability
         run: |
-          ss -tulin | grep :5000
-          if [ $? -eq 0 ]; then
+          container_id=$(docker ps -q --filter "publish=5000")
+          if [ -n "$container_id" ]; then
             echo "Port 5000 is in use. Stopping the running container."
             docker stop $(docker ps -q --filter "publish=5000")
           else

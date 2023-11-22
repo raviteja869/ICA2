@@ -70,19 +70,20 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - name: Check Port Availability
+        id: port_check
         run: |
-          container_id=$(docker ps -q --filter "publish=5000")
-          if [ -n "$container_id" ]; then
-            echo "Port 5000 is in use. Stopping the running container."
-            docker stop "$container_id"
-            echo "Waiting for port to be released..."
-            sleep 15  # Wait for 5 seconds
+          if ss -tuln | grep -q ':5000'; then
+            echo "Port 5000 in use. Using alternative port 5001."
+            echo "::set-output name=port::5001"
           else
-            echo "Port 5000 is available"
+            echo "Port 5000 is available."
+            echo "::set-output name=port::5000"
           fi
       - name: Start Dockerized Application
-        run: docker run -d -p 5000:5000 ghcr.io/raviteja869/mandelbrot-set-visualizer:latest
+        run: docker run -d -p ${{ steps.port_check.outputs.port }}:5000 ghcr.io/raviteja869/mandelbrot-set-visualizer:latest
       - name: Run Integration Tests
+        env:
+          APP_PORT: ${{ steps.port_check.outputs.port }}
         run: ./run_integration_tests.sh
 
   Deploy:

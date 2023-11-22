@@ -27,9 +27,9 @@ This repository contains the implementation of a CI/CD pipeline for a basic web 
 
 ### Setting Up Self-Hosted Runners
 1. **Windows Runner**:
-   - Instructions for setting up a self-hosted runner on a Windows machine [here](link_to_windows_runner_setup).
+   - Instructions for setting up a self-hosted runner on a Windows machine [here](https://github.com/raviteja869/ICA2/settings/actions/runners/new?arch=x64&os=win).
 2. **Linux Runner**:
-   - Instructions for setting up a self-hosted runner on a Linux machine [here](link_to_linux_runner_setup).
+   - Instructions for setting up a self-hosted runner on a Linux machine [here](https://github.com/raviteja869/ICA2/settings/actions/runners/new?arch=x64&os=linux).
 
 ### Running Workflows
 - **Push to Main Branch**:

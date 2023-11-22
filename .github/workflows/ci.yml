@@ -71,7 +71,7 @@ jobs:
       - uses: actions/checkout@v2
       - name: Check Port Availability
         run: |
-          netstat -ano | grep :5000
+          ss -tulin | grep :5000
           if [ $? -eq 0 ]; then
             echo "Port 5000 is in use. Stopping the running container."
             docker stop $(docker ps -q --filter "publish=5000")

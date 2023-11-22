@@ -74,7 +74,8 @@ jobs:
           container_id=$(docker ps -q --filter "publish=5000")
           if [ -n "$container_id" ]; then
             echo "Port 5000 is in use. Stopping the running container."
-            docker stop $(docker ps -q --filter "publish=5000")
+            docker stop "$container_id"
+            
           else
             echo "Port 5000 is available"
           fi

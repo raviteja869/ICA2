@@ -69,21 +69,25 @@ jobs:
     runs-on: [self-hosted, Linux, X64]
     steps:
       - uses: actions/checkout@v2
-      - name: Check Port Availability
-        id: port_check
+      
+      # Find an available port
+      - name: Find Available Port
+        id: find_port
         run: |
-          if ss -tuln | grep -q ':5000'; then
-            echo "Port 5000 in use. Using alternative port 5001."
-            echo "::set-output name=port::5001"
-          else
-            echo "Port 5000 is available."
-            echo "::set-output name=port::5000"
-          fi
+          for port in {5000..5100}; do
+            if ! ss -tuln | grep -q ":$port"; then
+              echo "Available port: $port"
+              echo "::set-output name=port::$port"
+              break
+            fi
+          done
+
       - name: Start Dockerized Application
-        run: docker run -d -p ${{ steps.port_check.outputs.port }}:5000 ghcr.io/raviteja869/mandelbrot-set-visualizer:latest
+        run: docker run -d -p ${{ steps.find_port.outputs.port }}:5000 ghcr.io/raviteja869/mandelbrot-set-visualizer:latest
+      
       - name: Run Integration Tests
         env:
-          APP_PORT: ${{ steps.port_check.outputs.port }}
+          APP_PORT: ${{ steps.find_port.outputs.port }}
         run: ./run_integration_tests.sh
 
   Deploy:

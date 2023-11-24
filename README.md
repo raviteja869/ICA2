@@ -1,4 +1,4 @@
-# ICA2 Group 3 CI/CD Pipeline Project
+# ICA2 Group3 CI/CD Pipeline Project
 
 ## Project Overview
 This repository contains the implementation of a CI/CD pipeline for a basic web application using GitHub Actions. The project demonstrates the use of Artifacts, Self-Hosted Runners, Docker Containerization, Service Containers, and Custom Actions.

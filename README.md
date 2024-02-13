@@ -1,7 +1,7 @@
-# ICA2 Group 3 CI/CD Pipeline Project
+#CI/CD Pipeline Project - Python ML Application
 
 ## Project Overview
-This repository contains the implementation of a CI/CD pipeline for a basic web application using GitHub Actions. The project demonstrates the use of Artifacts, Self-Hosted Runners, Docker Containerization, Service Containers, and Custom Actions.
+This repository contains the implementation of a CI/CD pipeline for a Python ML Application using GitHub Actions. The project demonstrates the use of Artifacts, Self-Hosted Runners, Docker Containerization, Service Containers, and Custom Actions.
 
 ### Key Features
 - **Artifacts**: Unit test reports are generated and stored as artifacts.
@@ -51,11 +51,6 @@ This repository contains the implementation of a CI/CD pipeline for a basic web 
 - Create a new branch for your feature.
 - Commit changes and open a pull request with a clear description.
 
-## License
-[MIT License]
 
-## Contact Information
-- **Team Members**: Ravi Teja, Hari Krishna, Vishnukanth, Bharath reddy, dharma reddy, Aquib Khan
-- **Instructor**: Graham Wall
 
 ---
